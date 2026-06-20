@@ -17,7 +17,7 @@
 
 [node name="Player" type="CharacterBody3D" unique_id=624868244]
 script = ExtResource("1_4anbu")
-dash_cooldown_time = 2.4
+dash_cooldown_time = 0.3
 
 [node name="GunHolder" type="Node3D" parent="." unique_id=1707754478]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4235183, 0, -0.32950178)
@@ -45,6 +45,7 @@ script = ExtResource("3_244u8")
 
 [node name="Move" type="Node" parent="StateMachine" unique_id=1906544739]
 script = ExtResource("4_5f2sf")
+aim_move_speed = 5.6
 
 [node name="Jump" type="Node" parent="StateMachine" unique_id=1445761856]
 script = ExtResource("5_5f2sf")
@@ -52,7 +53,7 @@ script = ExtResource("5_5f2sf")
 [node name="Dash" type="Node" parent="StateMachine" unique_id=1363910902]
 script = ExtResource("7_x42xx")
 dash_speed = 35.0
-dash_distance = 8.0
+dash_distance = 8.5
 
 [node name="CamNode" type="Node3D" parent="." unique_id=667334035]
 

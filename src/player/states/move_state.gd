@@ -1,6 +1,7 @@
 extends PlayerState
 
 @export var move_speed: float = 8.0
+@export var aim_move_speed: float = 6.0
 @export var acceleration: float = 60.0    
 @export var deceleration: float = 50.0
 
@@ -21,9 +22,12 @@ func physics_update(delta: float) -> void:
 	var direction = (player.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	var current_accel = acceleration if input_dir != Vector2.ZERO else deceleration
-	
-	player.velocity.x = move_toward(player.velocity.x, direction.x * move_speed, current_accel * delta)
-	player.velocity.z = move_toward(player.velocity.z, direction.z * move_speed, current_accel * delta)
+	if not player.is_aiming:
+		player.velocity.x = move_toward(player.velocity.x, direction.x * move_speed, current_accel * delta)
+		player.velocity.z = move_toward(player.velocity.z, direction.z * move_speed, current_accel * delta)
+	else :
+		player.velocity.x = move_toward(player.velocity.x, direction.x * aim_move_speed, current_accel * delta)
+		player.velocity.z = move_toward(player.velocity.z, direction.z * aim_move_speed, current_accel * delta)
 
 
 	if not player.is_on_floor():

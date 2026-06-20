@@ -3,6 +3,7 @@ extends CharacterBody3D
 @onready var state_machine:=$StateMachine
 @export_category("Camera Settings")
 @export var mouse_sensitivity : float = 0.003
+@export var aim_mouse_sensitivity: float = 0.002
 @export var default_offset: Vector3 = Vector3(0.5, 0.6, 0.0)
 @export var aim_offset: Vector3 = Vector3(0.5, 0.6, 0.0)
 @export var default_fov:float = 75.0
@@ -87,8 +88,12 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		# Rotate character horizontally, pivot vertically
-		rotate_y(-event.relative.x * mouse_sensitivity)
-		cam_node.rotate_x(-event.relative.y * mouse_sensitivity)
+		if not is_aiming:
+			rotate_y(-event.relative.x * mouse_sensitivity)
+			cam_node.rotate_x(-event.relative.y * mouse_sensitivity)
+		else :
+			rotate_y(-event.relative.x * aim_mouse_sensitivity)
+			cam_node.rotate_x(-event.relative.y * aim_mouse_sensitivity)
 		cam_node.rotation.x = clamp(cam_node.rotation.x, deg_to_rad(-55), deg_to_rad(35))
 		
 

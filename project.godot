@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="guns blazing"
-run/main_scene="uid://be41curyfsiwh"
+run/main_scene="uid://d0kobxe7i2oqw"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
