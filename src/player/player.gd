@@ -10,32 +10,36 @@ extends CharacterBody3D
 @export var aim_fov:float = 55  
 @export var zoom_speed:float = 20
 
-@export_category("Recoil Profiles")
-@export var recoil_up: float = 0.04        # Vertical camera kick per shot
-@export var recoil_side: float = 0.02      # Max horizontal camera sway (-side to +side)
-@export var gun_kick_back: float = 0.15    # Physical pushback distance of the 3D gun mesh
-@export var recoil_snappiness: float = 22.0 # How fast the camera/gun snaps up
-@export var recoil_return: float = 12.0     # How fast it recovers back to center
+@export_category("Recoil")
+@export var recoil_up := 0.05
+@export var recoil_side := 0.02
+@export var aim_recoil_up:float = 0.03
+@export var aim_recoil_side:float = 0.005
+@export var recoil_snappiness := 20.0
+@export var recoil_return := 10.0
+@export_range(0.0, 1.0) var recoil_recovery_ratio := 0.7
 
-# Node References
-@onready var weapon_recoil_pivot: Node3D = $GunHolder/WeaponRecoilPivot
+@onready var recoil_pivot:Node3D = $CamNode/RecoilPivot
 
-# Structural Trackers
-var target_cam_recoil: Vector2 = Vector2.ZERO
-var current_cam_recoil: Vector2 = Vector2.ZERO
+var target_recoil_x := 0.0
+var target_recoil_y := 0.0
 
-var target_gun_kick: float = 0.0
-var current_gun_kick: float = 0.0
+var current_recoil_x := 0.0
+var current_recoil_y := 0.0
+
+# Tracks the base offset where the gun is trying to return to
+var base_recoil_offset_x := 0.0 
+var base_recoil_offset_y := 0.0
 
 @export_category("Damping")
-@export var translation_damping: float = 20.0  # Increased slightly for snappier catch-up near ground
+@export var translation_damping: float = 20.0  
 @export var rotation_damping: float = 25.0
 
 @onready var cam_node: Node3D = $CamNode
 @onready var camera: Camera3D = $Camera3D
 @onready var aim_raycast:RayCast3D = $Camera3D/AimRayCast
-@onready var camera_target: Node3D = $CamNode/SpringArm3D/CameraTarget
-@onready var spring_arm: SpringArm3D = $CamNode/SpringArm3D
+@onready var camera_target: Node3D = $CamNode/RecoilPivot/SpringArm3D/CameraTarget
+@onready var spring_arm: SpringArm3D = $CamNode/RecoilPivot/SpringArm3D
 
 @onready var gun_holder:= $GunHolder
 @onready var current_gun:=$GunHolder/Gun
@@ -49,7 +53,7 @@ var can_dash:bool  = true
 
 
 func _ready():
-	Input.mouse_mode =Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	cam_node.position = default_offset
 	camera.global_transform = camera_target.global_transform
 	camera.fov = default_fov
@@ -62,20 +66,20 @@ func _ready():
 		hud.on_ammo_changed(current_gun.current_clip,current_gun.reserve_ammo)
 
 func _process(delta: float) -> void:
-	if Input.is_action_pressed("shoot"):
+	var is_shooting = Input.is_action_pressed("shoot")
+	if is_shooting:
 		shoot()
-		apply_weapon_recoil()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	is_aiming = Input.is_action_pressed("zoom") 
 	
-	# 4. Smoothly blend the Camera Rig Position (Offset) and FOV
+	# Smoothly blend the Camera Rig Position (Offset) and FOV
 	var target_offset = aim_offset if is_aiming else default_offset
 	var target_fov = aim_fov if is_aiming else default_fov
 	
 	cam_node.position = cam_node.position.lerp(target_offset, zoom_speed * delta)
 	camera.fov = lerp(camera.fov, target_fov, zoom_speed * delta)
 	
-	#camera tracking
+	# Camera tracking
 	var target_distance = cam_node.global_position.distance_to(camera_target.global_position)
 	var current_distance = cam_node.global_position.distance_to(camera.global_position)
 	
@@ -92,25 +96,36 @@ func _process(delta: float) -> void:
 	var blended_quat = current_quat.slerp(target_quat, rotation_damping * delta)
 	camera.global_transform.basis = Basis(blended_quat)
 	
-# --- 1. RECOIL DECAY ENGINE ---
-	# Decay target offsets back to rest positions
-	target_cam_recoil = target_cam_recoil.lerp(Vector2.ZERO, recoil_return * delta)
-	target_gun_kick = lerp(target_gun_kick, 0.0, recoil_return * delta)
-	
-	# Smoothly snap current positions toward target metrics
-	current_cam_recoil = current_cam_recoil.lerp(target_cam_recoil, recoil_snappiness * delta)
-	current_gun_kick = lerp(current_gun_kick, target_gun_kick, recoil_snappiness * delta)
-	
-	# --- 2. APPLY VISUAL CAMERA KICK ---
-	# We update your existing cam_node rotation tracking explicitly by including the offsets
-	# This ensures your mouse control handles orientation while recoil adds clean deviation layering
-	camera.rotation.x = current_cam_recoil.x
-	camera.rotation.y = current_cam_recoil.y
+	# --- RECOIL RETURN SYSTEM ---
+	target_recoil_x = lerp(target_recoil_x, base_recoil_offset_x, recoil_return * delta)
+	target_recoil_y = lerp(target_recoil_y, base_recoil_offset_y, recoil_return * delta)
 
-	# --- 3. APPLY PHYSICAL WEAPON KICK ---
-	# Physically slam the gun model backwards along the Z axis relative to its holder pivot
-	if weapon_recoil_pivot:
-		weapon_recoil_pivot.position.z = current_gun_kick
+	# LERP current recoil toward target recoil
+	current_recoil_x = lerp(current_recoil_x, target_recoil_x, recoil_snappiness * delta)
+	current_recoil_y = lerp(current_recoil_y, target_recoil_y, recoil_snappiness * delta)
+
+	# Apply to the separate recoil pivot node
+	recoil_pivot.rotation.x = current_recoil_x
+	recoil_pivot.rotation.y = current_recoil_y
+	
+	#bake cam offset to the recoil recovery unit
+	if not is_shooting and abs(current_recoil_x - base_recoil_offset_x) < 0.005:
+		if abs(current_recoil_x) > 0.0:
+			# Bake the persistent offset permanently into the mouse controller
+			cam_node.rotate_x(current_recoil_x)
+			rotate_y(current_recoil_y)
+			
+			# Keep angles clean
+			cam_node.rotation.x = clamp(cam_node.rotation.x, deg_to_rad(-55), deg_to_rad(35))
+			
+			# Clear out the pools completely so it's ready for the next spray
+			target_recoil_x = 0.0
+			target_recoil_y = 0.0
+			current_recoil_x = 0.0
+			current_recoil_y = 0.0
+			base_recoil_offset_x = 0.0
+			base_recoil_offset_y = 0.0
+			recoil_pivot.rotation = Vector3.ZERO
 	
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("pause"):
@@ -122,15 +137,12 @@ func _input(event: InputEvent) -> void:
 		if state_machine.current_state.name != "Dash":
 			state_machine.transition_to("Dash")
 
-#Handle mouse movement
+# Handle mouse movement
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
-		if not is_aiming:
-			rotate_y(-event.relative.x * mouse_sensitivity)
-			cam_node.rotate_x(-event.relative.y * mouse_sensitivity)
-		else :
-			rotate_y(-event.relative.x * aim_mouse_sensitivity)
-			cam_node.rotate_x(-event.relative.y * aim_mouse_sensitivity)
+		var sensitivity = aim_mouse_sensitivity if is_aiming else mouse_sensitivity
+		rotate_y(-event.relative.x * sensitivity)
+		cam_node.rotate_x(-event.relative.y * sensitivity)
 		cam_node.rotation.x = clamp(cam_node.rotation.x, deg_to_rad(-55), deg_to_rad(35))
 		
 
@@ -150,12 +162,19 @@ func shoot():
 		
 	var muzzle_pos = current_gun.muzzle.global_position
 	var shoot_direction = (aim_point - muzzle_pos).normalized()
-	current_gun.shoot(shoot_direction)
 	
-func apply_weapon_recoil() -> void:
-	# Kick camera up (X-axis) and add a random horizontal sway (Y-axis)
-	target_cam_recoil.x -= recoil_up
-	target_cam_recoil.y += randf_range(-recoil_side, recoil_side)
+	var did_fire:bool = await current_gun.shoot(shoot_direction)
+	if did_fire:
+		apply_recoil()
 	
-	# Drive the gun model backward physically
-	target_gun_kick = gun_kick_back
+func apply_recoil() -> void:
+	var current_recoil_up = aim_recoil_up if is_aiming else recoil_up
+	var current_recoil_side = aim_recoil_side if is_aiming else aim_recoil_side
+	
+	target_recoil_x += current_recoil_up
+	var random_side = randf_range(-current_recoil_side, current_recoil_side)
+	target_recoil_y += random_side
+	
+
+	base_recoil_offset_x += current_recoil_up * (1.0 - recoil_recovery_ratio)
+	base_recoil_offset_y += random_side * (1.0 - recoil_recovery_ratio)

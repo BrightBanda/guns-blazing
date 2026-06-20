@@ -18,6 +18,7 @@
 [node name="Player" type="CharacterBody3D" unique_id=624868244]
 script = ExtResource("1_4anbu")
 aim_mouse_sensitivity = 0.001
+recoil_recovery_ratio = 0.8
 dash_cooldown_time = 0.3
 
 [node name="GunHolder" type="Node3D" parent="." unique_id=1707754478]
@@ -60,11 +61,13 @@ dash_distance = 8.5
 
 [node name="CamNode" type="Node3D" parent="." unique_id=667334035]
 
-[node name="SpringArm3D" type="SpringArm3D" parent="CamNode" unique_id=1431959085]
+[node name="RecoilPivot" type="Node3D" parent="CamNode" unique_id=2077459321]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CamNode/RecoilPivot" unique_id=1431959085]
 collision_mask = 0
 spring_length = 2.0
 
-[node name="CameraTarget" type="Node3D" parent="CamNode/SpringArm3D" unique_id=2105035163]
+[node name="CameraTarget" type="Node3D" parent="CamNode/RecoilPivot/SpringArm3D" unique_id=2105035163]
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=422305416]
 anchors_preset = 15
