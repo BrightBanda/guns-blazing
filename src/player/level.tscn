@@ -78,10 +78,10 @@ material = SubResource("StandardMaterial3D_rcip6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -8)
 
 [node name="Target3" parent="." unique_id=328484917 instance=ExtResource("2_gm71x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9390678, 0, -1.6698551)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.737961, 0, -1.6698551)
 
 [node name="Target4" parent="." unique_id=405752824 instance=ExtResource("2_gm71x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6475391, 0, 4.921707)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6523647, 0, 4.921707)
 
 [node name="Target5" parent="." unique_id=1894994075 instance=ExtResource("2_gm71x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3299732, 0, 9.728561)
