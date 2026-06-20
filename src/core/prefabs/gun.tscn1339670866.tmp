@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dnc810yhp4ta5"]
+
+[ext_resource type="Script" uid="uid://j4qchf2o1101" path="res://src/core/gun.gd" id="1_ghec1"]
+[ext_resource type="Resource" uid="uid://b5vdoe1nhr058" path="res://src/core/resources/ak47_resource.tres" id="2_54qod"]
+[ext_resource type="PackedScene" uid="uid://ce0gs6vd4b3sb" path="res://assets/models/Assault Rifle.glb" id="2_hpwqi"]
+
+[node name="Gun" type="Node3D" unique_id=993587285]
+script = ExtResource("1_ghec1")
+data = ExtResource("2_54qod")
+
+[node name="Assault Rifle" parent="." unique_id=259561410 instance=ExtResource("2_hpwqi")]
+transform = Transform3D(0.405, 0, 0, 0, 0.405, 0, 0, 0, 0.405, 0, 0, 0)
+
+[node name="ShootRaycast" type="RayCast3D" parent="." unique_id=92275041]
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Muzzle" type="Marker3D" parent="." unique_id=614749938]

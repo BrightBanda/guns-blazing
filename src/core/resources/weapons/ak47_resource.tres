@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WeaponResource" format=3 uid="uid://b5vdoe1nhr058"]
+
+[ext_resource type="Script" uid="uid://dvmpw6mfv34t4" path="res://src/core/resources/scripts/weapon_resource.gd" id="1_dhwlq"]
+[ext_resource type="AudioStream" uid="uid://cr4vs70ufp12s" path="res://src/sounds/audiomass-output.mp3" id="1_rwkdr"]
+
+[resource]
+script = ExtResource("1_dhwlq")
+fire_rate = 0.15
+max_reserve = 250
+reload_speed = 1.6
+gun_sound = ExtResource("1_rwkdr")
+metadata/_custom_type_script = "uid://dvmpw6mfv34t4"

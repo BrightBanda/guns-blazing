@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://bvwlh8grvy4el"]
+
+[ext_resource type="Script" uid="uid://dunl0uq6vro8" path="res://src/player/player.gd" id="1_4anbu"]
+[ext_resource type="PackedScene" uid="uid://dnc810yhp4ta5" path="res://src/core/prefabs/gun.tscn" id="2_o822w"]
+[ext_resource type="Script" uid="uid://bishiyyjdbs13" path="res://src/player/state_machine.gd" id="2_rxibo"]
+[ext_resource type="Script" uid="uid://degbedxp4fed3" path="res://src/player/states/idle_state.gd" id="3_244u8"]
+[ext_resource type="Script" uid="uid://tbwolteduuik" path="res://src/player/states/move_state.gd" id="4_5f2sf"]
+[ext_resource type="Script" uid="uid://btr6ka8cf1xm6" path="res://src/player/states/jump_state.gd" id="5_5f2sf"]
+[ext_resource type="Texture2D" uid="uid://t54r1tviyu4l" path="res://assets/crosshair086.png" id="6_jiejy"]
+[ext_resource type="Script" uid="uid://bldioxv4skgy5" path="res://src/player/states/dash_state.gd" id="7_x42xx"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qnmj6"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4anbu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4anbu"]
+
+[node name="Player" type="CharacterBody3D" unique_id=624868244]
+script = ExtResource("1_4anbu")
+dash_cooldown_time = 2.4
+
+[node name="GunHolder" type="Node3D" parent="." unique_id=1707754478]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4235183, 0, -0.32950178)
+
+[node name="Gun" parent="GunHolder" unique_id=993587285 instance=ExtResource("2_o822w")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1347433209]
+transform = Transform3D(0.77, 0, 0, 0, 0.77, 0, 0, 0, 0.77, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_qnmj6")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=646382196]
+transform = Transform3D(0.472, 0, 0, 0, 0.155, 0, 0, 0, 0.499, 0, 0.44333935, -0.32787162)
+mesh = SubResource("BoxMesh_4anbu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1226873085]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_4anbu")
+
+[node name="StateMachine" type="Node" parent="." unique_id=1757702440 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_rxibo")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=1262314234]
+script = ExtResource("3_244u8")
+
+[node name="Move" type="Node" parent="StateMachine" unique_id=1906544739]
+script = ExtResource("4_5f2sf")
+
+[node name="Jump" type="Node" parent="StateMachine" unique_id=1445761856]
+script = ExtResource("5_5f2sf")
+
+[node name="Dash" type="Node" parent="StateMachine" unique_id=1363910902]
+script = ExtResource("7_x42xx")
+dash_speed = 35.0
+dash_distance = 8.0
+
+[node name="CamNode" type="Node3D" parent="." unique_id=667334035]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CamNode" unique_id=1431959085]
+collision_mask = 0
+spring_length = 2.0
+
+[node name="CameraTarget" type="Node3D" parent="CamNode/SpringArm3D" unique_id=2105035163]
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=422305416]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair161" type="TextureRect" parent="." unique_id=1935579584]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_jiejy")
+expand_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=144374921]
+fov = 50.0
+
+[node name="AimRayCast" type="RayCast3D" parent="Camera3D" unique_id=270052310]
+visible = false

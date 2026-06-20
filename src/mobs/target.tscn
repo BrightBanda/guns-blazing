@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://b8tmp0au4w7up"]
+
+[ext_resource type="Script" uid="uid://cajam6ylfeqpy" path="res://src/mobs/target.gd" id="1_yucvo"]
+[ext_resource type="Resource" uid="uid://ug6kraryxlux" path="res://src/core/resources/enemies/dummy_target.tres" id="2_dlg80"]
+[ext_resource type="Script" uid="uid://dw3ew35n4i56s" path="res://src/mobs/mesh_instance_3d.gd" id="2_ikni8"]
+[ext_resource type="Shader" uid="uid://dl2kq6o5qjl6a" path="res://src/mobs/target.gdshader" id="2_py5ql"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pu5hc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_py5ql"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yucvo"]
+material = SubResource("StandardMaterial3D_py5ql")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dlg80"]
+render_priority = 0
+shader = ExtResource("2_py5ql")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+
+[node name="Target" type="StaticBody3D" unique_id=1804458514]
+script = ExtResource("1_yucvo")
+data = ExtResource("2_dlg80")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=209429628]
+shape = SubResource("CapsuleShape3D_pu5hc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1725606862]
+mesh = SubResource("CapsuleMesh_yucvo")
+surface_material_override/0 = SubResource("ShaderMaterial_dlg80")
+script = ExtResource("2_ikni8")

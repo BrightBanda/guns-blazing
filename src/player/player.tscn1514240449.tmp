@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://bvwlh8grvy4el"]
+
+[ext_resource type="Script" uid="uid://bishiyyjdbs13" path="res://src/player/state_machine.gd" id="1_4anbu"]
+[ext_resource type="Script" uid="uid://degbedxp4fed3" path="res://src/player/states/idle_state.gd" id="2_5f2sf"]
+[ext_resource type="Script" uid="uid://tbwolteduuik" path="res://src/player/states/move_state.gd" id="2_rxibo"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="3_244u8"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_5f2sf"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qnmj6"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4anbu"]
+
+[sub_resource type="Resource" id="Resource_jiejy"]
+script = ExtResource("4_5f2sf")
+
+[node name="Player" type="CharacterBody3D" unique_id=1381117048]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1498186727]
+shape = SubResource("CapsuleShape3D_qnmj6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1618085353]
+mesh = SubResource("CapsuleMesh_4anbu")
+
+[node name="StateMachine" type="Node" parent="." unique_id=813789563 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("1_4anbu")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=31167659]
+script = ExtResource("2_5f2sf")
+
+[node name="Move" type="Node" parent="StateMachine" unique_id=573610595]
+script = ExtResource("2_rxibo")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1638697760]
+
+[node name="PhantomCamera3D" type="Node3D" parent="Camera3D" unique_id=993403747 node_paths=PackedStringArray("follow_target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("3_244u8")
+follow_mode = 6
+follow_target = NodePath("../..")
+tween_resource = SubResource("Resource_jiejy")
+align_transform_with_view = Callable()
+align_position_with_view = Callable()
+align_rotation_with_view = Callable()
+metadata/_custom_type_script = "uid://csjccrhj5wnx7"
