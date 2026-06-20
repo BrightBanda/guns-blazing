@@ -10,6 +10,23 @@ extends CharacterBody3D
 @export var aim_fov:float = 55  
 @export var zoom_speed:float = 20
 
+@export_category("Recoil Profiles")
+@export var recoil_up: float = 0.04        # Vertical camera kick per shot
+@export var recoil_side: float = 0.02      # Max horizontal camera sway (-side to +side)
+@export var gun_kick_back: float = 0.15    # Physical pushback distance of the 3D gun mesh
+@export var recoil_snappiness: float = 22.0 # How fast the camera/gun snaps up
+@export var recoil_return: float = 12.0     # How fast it recovers back to center
+
+# Node References
+@onready var weapon_recoil_pivot: Node3D = $GunHolder/WeaponRecoilPivot
+
+# Structural Trackers
+var target_cam_recoil: Vector2 = Vector2.ZERO
+var current_cam_recoil: Vector2 = Vector2.ZERO
+
+var target_gun_kick: float = 0.0
+var current_gun_kick: float = 0.0
+
 @export_category("Damping")
 @export var translation_damping: float = 20.0  # Increased slightly for snappier catch-up near ground
 @export var rotation_damping: float = 25.0
@@ -47,6 +64,7 @@ func _ready():
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("shoot"):
 		shoot()
+		apply_weapon_recoil()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	is_aiming = Input.is_action_pressed("zoom") 
 	
@@ -74,6 +92,26 @@ func _process(delta: float) -> void:
 	var blended_quat = current_quat.slerp(target_quat, rotation_damping * delta)
 	camera.global_transform.basis = Basis(blended_quat)
 	
+# --- 1. RECOIL DECAY ENGINE ---
+	# Decay target offsets back to rest positions
+	target_cam_recoil = target_cam_recoil.lerp(Vector2.ZERO, recoil_return * delta)
+	target_gun_kick = lerp(target_gun_kick, 0.0, recoil_return * delta)
+	
+	# Smoothly snap current positions toward target metrics
+	current_cam_recoil = current_cam_recoil.lerp(target_cam_recoil, recoil_snappiness * delta)
+	current_gun_kick = lerp(current_gun_kick, target_gun_kick, recoil_snappiness * delta)
+	
+	# --- 2. APPLY VISUAL CAMERA KICK ---
+	# We update your existing cam_node rotation tracking explicitly by including the offsets
+	# This ensures your mouse control handles orientation while recoil adds clean deviation layering
+	camera.rotation.x = current_cam_recoil.x
+	camera.rotation.y = current_cam_recoil.y
+
+	# --- 3. APPLY PHYSICAL WEAPON KICK ---
+	# Physically slam the gun model backwards along the Z axis relative to its holder pivot
+	if weapon_recoil_pivot:
+		weapon_recoil_pivot.position.z = current_gun_kick
+	
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("pause"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -81,13 +119,12 @@ func _input(event: InputEvent) -> void:
 		current_gun.start_reload()
 		
 	if event.is_action_pressed("dash") and can_dash:
-		# Check to ensure they aren't already dashing before forcing a state swap
-		#if state_machine.current_state.name != "Dash":
-		state_machine.transition_to("Dash")
-		
+		if state_machine.current_state.name != "Dash":
+			state_machine.transition_to("Dash")
+
+#Handle mouse movement
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
-		# Rotate character horizontally, pivot vertically
 		if not is_aiming:
 			rotate_y(-event.relative.x * mouse_sensitivity)
 			cam_node.rotate_x(-event.relative.y * mouse_sensitivity)
@@ -97,7 +134,6 @@ func _unhandled_input(event):
 		cam_node.rotation.x = clamp(cam_node.rotation.x, deg_to_rad(-55), deg_to_rad(35))
 		
 
-# Asynchronous function to reset dash eligibility outside of the state execution loop
 func start_dash_cooldown() -> void:
 	await get_tree().create_timer(dash_cooldown_time).timeout
 	can_dash = true
@@ -115,3 +151,11 @@ func shoot():
 	var muzzle_pos = current_gun.muzzle.global_position
 	var shoot_direction = (aim_point - muzzle_pos).normalized()
 	current_gun.shoot(shoot_direction)
+	
+func apply_weapon_recoil() -> void:
+	# Kick camera up (X-axis) and add a random horizontal sway (Y-axis)
+	target_cam_recoil.x -= recoil_up
+	target_cam_recoil.y += randf_range(-recoil_side, recoil_side)
+	
+	# Drive the gun model backward physically
+	target_gun_kick = gun_kick_back

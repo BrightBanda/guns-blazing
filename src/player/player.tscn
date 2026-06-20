@@ -17,10 +17,13 @@
 
 [node name="Player" type="CharacterBody3D" unique_id=624868244]
 script = ExtResource("1_4anbu")
+aim_mouse_sensitivity = 0.001
 dash_cooldown_time = 0.3
 
 [node name="GunHolder" type="Node3D" parent="." unique_id=1707754478]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4235183, 0, -0.32950178)
+
+[node name="WeaponRecoilPivot" type="Node3D" parent="GunHolder" unique_id=1469372246]
 
 [node name="Gun" parent="GunHolder" unique_id=993587285 instance=ExtResource("2_o822w")]
 

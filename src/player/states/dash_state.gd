@@ -18,8 +18,6 @@ var start_position: Vector3
 @onready var state_machine = get_parent()
 
 func enter() -> void:
-	print("Entered dash state!")
-
 	player.can_dash = false
 	start_position = player.global_position
 
