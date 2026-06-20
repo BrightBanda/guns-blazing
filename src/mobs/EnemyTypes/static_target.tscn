@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cauqh3e1fk0jc"]
+
+[ext_resource type="Script" uid="uid://d1bm2y5if2l6d" path="res://src/mobs/EnemyTypes/static_target.gd" id="1_sxm0i"]
+[ext_resource type="Resource" uid="uid://ug6kraryxlux" path="res://src/core/resources/enemies/dummy_target.tres" id="2_38uux"]
+[ext_resource type="Shader" uid="uid://dl2kq6o5qjl6a" path="res://src/mobs/target.gdshader" id="3_dsiof"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_n0qa5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ag6km"]
+render_priority = 0
+shader = ExtResource("3_dsiof")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sxm0i"]
+size = Vector3(1, 1.1003418, 1)
+
+[node name="Static_target" type="StaticBody3D" unique_id=2050621874 node_paths=PackedStringArray("mesh_instance")]
+script = ExtResource("1_sxm0i")
+data = ExtResource("2_38uux")
+mesh_instance = NodePath("MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1621508136]
+transform = Transform3D(1.5136211, 0, 0, 0, 2.0266848, 0, 0, 0, 0.31100398, 0, 0, 0)
+mesh = SubResource("BoxMesh_n0qa5")
+surface_material_override/0 = SubResource("ShaderMaterial_ag6km")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1668306878]
+transform = Transform3D(1.4934125, 0, 0, 0, 1.7999998, 0, 0, 0, 0.39999998, 0, 0.021313474, 0)
+shape = SubResource("BoxShape3D_sxm0i")

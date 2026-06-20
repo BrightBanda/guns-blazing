@@ -4,5 +4,6 @@
 
 [resource]
 script = ExtResource("1_odga7")
-name = "target"
+name = "static_target"
+max_health = 100.0
 metadata/_custom_type_script = "uid://byrg5n0px0jik"

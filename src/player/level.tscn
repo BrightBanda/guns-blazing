@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://be41curyfsiwh"]
 
 [ext_resource type="PackedScene" uid="uid://bvwlh8grvy4el" path="res://src/player/player.tscn" id="1_rcip6"]
-[ext_resource type="PackedScene" uid="uid://b8tmp0au4w7up" path="res://src/mobs/target.tscn" id="2_gm71x"]
+[ext_resource type="PackedScene" uid="uid://b8tmp0au4w7up" path="res://src/mobs/EnemyTypes/target.tscn" id="2_gm71x"]
 [ext_resource type="PackedScene" uid="uid://bx5q7h0bwruxd" path="res://src/hud.tscn" id="3_rcip6"]
 
 [sub_resource type="GDScript" id="GDScript_g8cci"]
@@ -25,12 +25,12 @@ func _ready() -> void:
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 
-[sub_resource type="Sky" id="Sky_s1y2h"]
+[sub_resource type="Sky" id="Sky_rcip6"]
 sky_material = SubResource("ProceduralSkyMaterial_rpefr")
 
 [sub_resource type="Environment" id="Environment_e74yb"]
 background_mode = 2
-sky = SubResource("Sky_s1y2h")
+sky = SubResource("Sky_rcip6")
 tonemap_mode = 2
 
 [sub_resource type="BoxMesh" id="BoxMesh_g8cci"]

@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://d0kobxe7i2oqw"]
+
+[ext_resource type="PackedScene" uid="uid://bvwlh8grvy4el" path="res://src/player/player.tscn" id="1_m4pyl"]
+[ext_resource type="PackedScene" uid="uid://bx5q7h0bwruxd" path="res://src/hud.tscn" id="2_xeypc"]
+[ext_resource type="PackedScene" uid="uid://b8tmp0au4w7up" path="res://src/mobs/EnemyTypes/target.tscn" id="3_7maii"]
+[ext_resource type="PackedScene" uid="uid://cauqh3e1fk0jc" path="res://src/mobs/EnemyTypes/static_target.tscn" id="4_3b8nh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1q8je"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_s1y2h"]
+sky_material = SubResource("ProceduralSkyMaterial_1q8je")
+
+[sub_resource type="Environment" id="Environment_m4pyl"]
+background_mode = 2
+sky = SubResource("Sky_s1y2h")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m4pyl"]
+albedo_color = Color(0.33354214, 0.18692964, 0.009426383, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1q8je"]
+albedo_color = Color(0.16924527, 0.1692453, 0.16924527, 1)
+
+[node name="TrainingGround" type="Node" unique_id=1411450601]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1054577849]
+environment = SubResource("Environment_m4pyl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=929631195]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="environment" type="Node3D" parent="." unique_id=1620464224]
+
+[node name="ground" type="CSGBox3D" parent="environment" unique_id=140831117]
+transform = Transform3D(20.08, 0, 0, 0, 1, 0, 0, 0, 38.84, 3.921875, -0.20367432, -6.5523534)
+use_collision = true
+size = Vector3(1.8320313, 0.59265137, 1.3374023)
+material = SubResource("StandardMaterial3D_m4pyl")
+
+[node name="side" type="CSGBox3D" parent="environment" unique_id=263624983]
+transform = Transform3D(20.08, 0, 0, 0, 1, 0, 0, 0, 38.84, -15.170303, 5.023102, -7.0786276)
+use_collision = true
+size = Vector3(0.022216797, 11.046204, 1.364502)
+material = SubResource("StandardMaterial3D_1q8je")
+
+[node name="side2" type="CSGBox3D" parent="environment" unique_id=1991509225]
+transform = Transform3D(20.08, 0, 0, 0, 1, 0, 0, 0, 38.84, 21.640198, 5.023102, -6.765708)
+use_collision = true
+size = Vector3(0.022216797, 11.046204, 1.3483887)
+material = SubResource("StandardMaterial3D_1q8je")
+
+[node name="shortside" type="CSGBox3D" parent="environment" unique_id=283303758]
+transform = Transform3D(20.08, 0, 0, 0, 1, 0, 0, 0, 38.84, 2.7104094, 5.023102, -31.443104)
+use_collision = true
+size = Vector3(1.9076538, 11.046204, 0.001)
+material = SubResource("StandardMaterial3D_1q8je")
+
+[node name="shortside2" type="CSGBox3D" parent="environment" unique_id=2103207662]
+transform = Transform3D(20.08, 0, 0, 0, 1, 0, 0, 0, 38.84, 3.5002995, 5.023102, 19.187984)
+use_collision = true
+size = Vector3(1.8289795, 11.046204, 0.001)
+material = SubResource("StandardMaterial3D_1q8je")
+
+[node name="shortside3" type="CSGBox3D" parent="environment" unique_id=1298190682]
+transform = Transform3D(20.08, 0, 0, 0, 1, 0, 0, 0, 38.84, 3.5002995, 0.17289162, -0.35360909)
+use_collision = true
+size = Vector3(1.8289795, 1.3457832, 0.001)
+material = SubResource("StandardMaterial3D_1q8je")
+
+[node name="Player" parent="." unique_id=624868244 instance=ExtResource("1_m4pyl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7327347, 2.4200969)
+
+[node name="HUD" parent="." unique_id=1832105293 instance=ExtResource("2_xeypc")]
+
+[node name="Targets" type="Node3D" parent="." unique_id=416720782]
+
+[node name="Target" parent="Targets" unique_id=1804458514 instance=ExtResource("3_7maii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.9110298, -5.0370674)
+
+[node name="Target2" parent="Targets" unique_id=367300815 instance=ExtResource("3_7maii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0855422, 0.9110298, -10.359524)
+
+[node name="Target3" parent="Targets" unique_id=1738420649 instance=ExtResource("3_7maii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.778085, 0.9110298, -16.542719)
+
+[node name="Target4" parent="Targets" unique_id=1503263898 instance=ExtResource("3_7maii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.892006, 0.9110298, -23.939194)
+
+[node name="Static_target" parent="Targets" unique_id=2050621874 instance=ExtResource("4_3b8nh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8309655, 1.1735611, -4.191395)
+
+[node name="Static_target2" parent="Targets" unique_id=2021473070 instance=ExtResource("4_3b8nh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3390241, 1.1735611, -10.55996)
+
+[node name="Static_target3" parent="Targets" unique_id=1983554388 instance=ExtResource("4_3b8nh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.073853, 1.1735611, -17.461056)
+
+[node name="Static_target4" parent="Targets" unique_id=1438066294 instance=ExtResource("4_3b8nh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.893644, 1.1735611, -23.693958)
