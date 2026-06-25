@@ -14,11 +14,8 @@ func physics_update(delta: float) -> void:
 	
 	var input_dir: Vector2 = get_movement_input()
 	
-	#handle animations
-	var current_blend = player.animation_tree.get("parameters/MoveSpace/blend_position")
-
-	#var target_blend = lerp(current_blend,input_dir,delta * 15)
-	player.animation_tree.set("parameters/MoveSpace/blend_position",input_dir)
+	#handle animations 
+	player.animation_tree.set("parameters/LocomotionSM/MoveSpace/blend_position", input_dir)
 	
 		#stop movement slowly
 	if input_dir == Vector2.ZERO and player.velocity.slide(Vector3.UP).length() < 0.1:

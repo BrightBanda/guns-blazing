@@ -14,8 +14,10 @@ extends PlayerState
 
 func enter() -> void:
 	player.velocity.y = jump_velocity
+	
 
 func physics_update(delta: float) -> void:
+	trigger_jump_animation()
 	var gravity = jump_gravity if player.velocity.y > 0.0 else fall_gravity
 	player.velocity.y -= gravity * delta
 
@@ -37,3 +39,6 @@ func physics_update(delta: float) -> void:
 			get_parent().transition_to("move") 
 		else:
 			get_parent().transition_to("idle")
+
+func trigger_jump_animation() -> void:
+	player.anim_playback.travel("Jump_full")

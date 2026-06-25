@@ -42,7 +42,8 @@ var base_recoil_offset_y := 0.0
 @onready var camera_target: Node3D = $CamNode/RecoilPivot/SpringArm3D/CameraTarget
 @onready var spring_arm: SpringArm3D = $CamNode/RecoilPivot/SpringArm3D
 
-@onready var animation_tree: AnimationTree =$AnimationTree
+@onready var animation_tree: AnimationTree = $composition12/AnimationTree
+@onready var anim_playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/LocomotionSM/playback")
 
 
 @onready var gun_holder:= $GunHolder
