@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://j4qchf2o1101" path="res://src/core/gun.gd" id="1_ghec1"]
 [ext_resource type="Resource" uid="uid://b5vdoe1nhr058" path="res://src/core/resources/weapons/ak47_resource.tres" id="2_54qod"]
-[ext_resource type="PackedScene" uid="uid://ce0gs6vd4b3sb" path="res://assets/models/Assault Rifle.glb" id="2_hpwqi"]
 [ext_resource type="Shader" uid="uid://cfib4e571a7yn" path="res://src/core/resources/shaders/muzzle_flash.gdshader" id="4_54qod"]
 [ext_resource type="PackedScene" uid="uid://b81fgnt65jlb2" path="res://assets/models/Scifi Smg.glb" id="4_hkoce"]
 
@@ -16,12 +15,9 @@ shader_parameter/flash_intensity = 0.0
 shader_parameter/seed = 0.0
 
 [node name="Gun" type="Node3D" unique_id=993587285]
+transform = Transform3D(0.495, 0, 0, 0, 0.495, 0, 0, 0, 0.495, 0, 0, 0)
 script = ExtResource("1_ghec1")
 data = ExtResource("2_54qod")
-
-[node name="Assault Rifle" parent="." unique_id=259561410 instance=ExtResource("2_hpwqi")]
-transform = Transform3D(0.405, 0, 0, 0, 0.405, 0, 0, 0, 0.405, 0, 0, 0)
-visible = false
 
 [node name="Root Scene" parent="." unique_id=379611560 instance=ExtResource("4_hkoce")]
 transform = Transform3D(-3.1909313e-08, 0, 0.73, 0, 0.73, 0, -0.73, 0, -3.1909313e-08, 0, 0, 0)

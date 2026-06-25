@@ -4,20 +4,54 @@
 [ext_resource type="PackedScene" uid="uid://dnc810yhp4ta5" path="res://src/core/prefabs/gun.tscn" id="2_o822w"]
 [ext_resource type="Script" uid="uid://bishiyyjdbs13" path="res://src/player/state_machine.gd" id="2_rxibo"]
 [ext_resource type="Script" uid="uid://degbedxp4fed3" path="res://src/player/states/idle_state.gd" id="3_244u8"]
+[ext_resource type="PackedScene" uid="uid://dma4qicabu33w" path="res://assets/models/composition12.glb" id="3_l271a"]
 [ext_resource type="Script" uid="uid://tbwolteduuik" path="res://src/player/states/move_state.gd" id="4_5f2sf"]
 [ext_resource type="Script" uid="uid://btr6ka8cf1xm6" path="res://src/player/states/jump_state.gd" id="5_5f2sf"]
 [ext_resource type="Texture2D" uid="uid://t54r1tviyu4l" path="res://assets/crosshair086.png" id="6_jiejy"]
 [ext_resource type="Script" uid="uid://bldioxv4skgy5" path="res://src/player/states/dash_state.gd" id="7_x42xx"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_qnmj6"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_4anbu"]
-
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4anbu"]
+height = 1.7695313
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l271a"]
+animation = &"run_gun"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8ydov"]
+animation = &"idle_gun"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ylhto"]
+animation = &"run_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cwolq"]
+animation = &"run_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2smqc"]
+animation = &"run_backwards"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_cwolq"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_l271a")
+blend_point_0/pos = Vector2(0, -1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_8ydov")
+blend_point_1/pos = Vector2(0, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_ylhto")
+blend_point_2/pos = Vector2(1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_cwolq")
+blend_point_3/pos = Vector2(-1, 0)
+blend_point_4/node = SubResource("AnimationNodeAnimation_2smqc")
+blend_point_4/pos = Vector2(0, 1)
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_2smqc"]
+graph_offset = Vector2(-77.44331, -1.5167115)
+nodes/output/position = Vector2(528, 96)
+nodes/MoveSpace/node = SubResource("AnimationNodeBlendSpace2D_cwolq")
+nodes/MoveSpace/position = Vector2(288, 80)
+node_connections = [&"output", 0, &"MoveSpace"]
 
 [node name="Player" type="CharacterBody3D" unique_id=624868244]
 script = ExtResource("1_4anbu")
 aim_mouse_sensitivity = 0.001
+default_offset = Vector3(0.4, 1.2, -0.6)
+aim_offset = Vector3(0.4, 1.2, -1)
 recoil_recovery_ratio = 0.8
 dash_cooldown_time = 0.3
 
@@ -25,19 +59,38 @@ dash_cooldown_time = 0.3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4235183, 0, -0.32950178)
 
 [node name="WeaponRecoilPivot" type="Node3D" parent="GunHolder" unique_id=1469372246]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35572588, 0.9807225, 0)
 
 [node name="Gun" parent="GunHolder" unique_id=993587285 instance=ExtResource("2_o822w")]
+transform = Transform3D(0.44199166, 0, 0, 0, 0.44199166, 0, 0, 0, 0.44199166, -0.35572588, 0.9807225, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1347433209]
-transform = Transform3D(0.77, 0, 0, 0, 0.77, 0, 0, 0, 0.77, 0, 0, 0)
-mesh = SubResource("CapsuleMesh_qnmj6")
+[node name="composition12" parent="." unique_id=494709255 instance=ExtResource("3_l271a")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=646382196]
-transform = Transform3D(0.472, 0, 0, 0, 0.155, 0, 0, 0, 0.499, 0, 0.44333935, -0.32787162)
-mesh = SubResource("BoxMesh_4anbu")
+[node name="metarig" parent="composition12" index="0" unique_id=1691794301]
+transform = Transform3D(0.97209233, -0.009859099, -0.23439129, 0.020864371, 0.9987907, 0.04451922, 0.23366894, -0.04816722, 0.97112226, 0.031177195, -0.016633082, 0.06219363)
+
+[node name="Skeleton3D" parent="composition12/metarig" index="0" unique_id=868283552]
+bones/1/rotation = Quaternion(-0.035214867, -0.010284738, -0.0038076297, 0.99931955)
+bones/2/rotation = Quaternion(-0.071581095, -0.002383416, 0.0040599215, 0.99742377)
+bones/3/rotation = Quaternion(0.016109305, -0.004922734, -0.00090795744, 0.9998577)
+bones/4/rotation = Quaternion(0.04272531, 0.010670436, 0.0050975853, 0.9990169)
+bones/5/rotation = Quaternion(0.0933268, 0.011250843, 0.0039648605, 0.99556416)
+bones/8/rotation = Quaternion(-0.018946715, 0.7671939, -0.50507724, 0.3949071)
+bones/9/rotation = Quaternion(0.48698038, -0.080840126, 0.027399406, 0.86923206)
+bones/12/rotation = Quaternion(0.15402898, -0.8068036, 0.48730057, 0.29644766)
+bones/13/rotation = Quaternion(0.7523369, 0.054173827, -0.030152958, 0.6558545)
+bones/17/rotation = Quaternion(0.9463343, 0.06494788, -0.10344234, 0.29922074)
+bones/18/rotation = Quaternion(0.25316676, -0.06900865, 0.016362594, 0.9648195)
+bones/19/rotation = Quaternion(-0.5531072, -0.013093351, 0.008514868, 0.83296376)
+bones/22/rotation = Quaternion(0.9621617, -0.0913776, 0.13453943, 0.21861891)
+bones/23/rotation = Quaternion(0.2737115, 0.07272756, -0.005329949, 0.95904344)
+bones/24/rotation = Quaternion(-0.6233859, -0.028676003, 0.006733999, 0.78135926)
+bones/25/rotation = Quaternion(0.04842727, 0.9676043, -0.24750924, -0.0116578825)
+bones/26/rotation = Quaternion(-0.6499562, 0.7184426, -0.1667727, -0.18325947)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1226873085]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0.58954996, 0)
 shape = SubResource("CapsuleShape3D_4anbu")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1757702440 node_paths=PackedStringArray("initial_state")]
@@ -96,3 +149,11 @@ fov = 50.0
 
 [node name="AimRayCast" type="RayCast3D" parent="Camera3D" unique_id=270052310]
 visible = false
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=697010087]
+root_node = NodePath("../composition12")
+tree_root = SubResource("AnimationNodeBlendTree_2smqc")
+anim_player = NodePath("../composition12/AnimationPlayer")
+parameters/MoveSpace/blend_position = Vector2(0, 0)
+
+[editable path="composition12"]

@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@onready var state_machine:=$StateMachine
+
 @export_category("Camera Settings")
 @export var mouse_sensitivity : float = 0.003
 @export var aim_mouse_sensitivity: float = 0.002
@@ -35,11 +35,15 @@ var base_recoil_offset_y := 0.0
 @export var translation_damping: float = 20.0  
 @export var rotation_damping: float = 25.0
 
+@onready var state_machine:=$StateMachine
 @onready var cam_node: Node3D = $CamNode
 @onready var camera: Camera3D = $Camera3D
 @onready var aim_raycast:RayCast3D = $Camera3D/AimRayCast
 @onready var camera_target: Node3D = $CamNode/RecoilPivot/SpringArm3D/CameraTarget
 @onready var spring_arm: SpringArm3D = $CamNode/RecoilPivot/SpringArm3D
+
+@onready var animation_tree: AnimationTree =$AnimationTree
+
 
 @onready var gun_holder:= $GunHolder
 @onready var current_gun:=$GunHolder/Gun
