@@ -5,6 +5,9 @@ extends PlayerState
 @export var acceleration: float = 60.0    
 @export var deceleration: float = 50.0
 
+@export var anim_blend_speed:float = 8.0
+var smooth_input:Vector2 = Vector2.ZERO
+
 func physics_update(delta: float) -> void:
 	
 	#check if is jump pressed 
@@ -14,8 +17,10 @@ func physics_update(delta: float) -> void:
 	
 	var input_dir: Vector2 = get_movement_input()
 	
-	#handle animations 
-	player.animation_tree.set("parameters/LocomotionSM/MoveSpace/blend_position", input_dir)
+	#handle animations
+
+	smooth_input = smooth_input.lerp(input_dir,anim_blend_speed * delta)
+	player.animation_tree.set("parameters/LocomotionSM/MoveSpace/blend_position", smooth_input)
 	
 		#stop movement slowly
 	if input_dir == Vector2.ZERO and player.velocity.slide(Vector3.UP).length() < 0.1:
@@ -41,3 +46,4 @@ func physics_update(delta: float) -> void:
 			player.velocity.y = 0
 			
 	player.move_and_slide()
+	

@@ -37,30 +37,47 @@ blend_point_3/pos = Vector2(-1, 0)
 blend_point_4/node = SubResource("AnimationNodeAnimation_oyld2")
 blend_point_4/pos = Vector2(0, 0)
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jcdrv"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vwsmr"]
 animation = &"jump_in_air"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jcdrv"]
+animation = &"jumping_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hja65"]
+animation = &"landing"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hja65"]
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l271a"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5shm8"]
+xfade_time = 0.1
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8ydov"]
-xfade_time = 0.3
-switch_mode = 2
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5efpn"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4uy46"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k60ra"]
+xfade_time = 0.1
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_5shm8"]
 states/End/position = Vector2(720, 101.798965)
 states/MoveSpace/node = SubResource("AnimationNodeBlendSpace2D_vwsmr")
-states/MoveSpace/position = Vector2(410.8, 110.73281)
+states/MoveSpace/position = Vector2(410, 109.93281)
 states/Start/position = Vector2(164, 101.73964)
-states/jump_full/node = SubResource("AnimationNodeAnimation_jcdrv")
-states/jump_full/position = Vector2(470, 22.4)
-transitions = ["Start", "MoveSpace", SubResource("AnimationNodeStateMachineTransition_hja65"), "MoveSpace", "jump_full", SubResource("AnimationNodeStateMachineTransition_l271a"), "jump_full", "MoveSpace", SubResource("AnimationNodeStateMachineTransition_8ydov")]
+states/falling/node = SubResource("AnimationNodeAnimation_vwsmr")
+states/falling/position = Vector2(519.60004, -18.555927)
+states/jumping_up/node = SubResource("AnimationNodeAnimation_jcdrv")
+states/jumping_up/position = Vector2(350.8, -13.393943)
+states/landing/node = SubResource("AnimationNodeAnimation_hja65")
+states/landing/position = Vector2(665.19995, 3.3525524)
+transitions = ["Start", "MoveSpace", SubResource("AnimationNodeStateMachineTransition_hja65"), "MoveSpace", "jumping_up", SubResource("AnimationNodeStateMachineTransition_5shm8"), "jumping_up", "falling", SubResource("AnimationNodeStateMachineTransition_5efpn"), "falling", "landing", SubResource("AnimationNodeStateMachineTransition_4uy46"), "landing", "MoveSpace", SubResource("AnimationNodeStateMachineTransition_k60ra")]
 graph_offset = Vector2(0, -53.979927)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_5efpn"]
-graph_offset = Vector2(-291.19067, 5.7203)
+graph_offset = Vector2(-178.59903, -70.02452)
 nodes/output/position = Vector2(304, 144)
 nodes/LocomotionSM/node = SubResource("AnimationNodeStateMachine_5shm8")
 nodes/LocomotionSM/position = Vector2(32, 128)
@@ -120,16 +137,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35572588, 0.9807225, 0)
 [node name="Gun" parent="GunHolder" unique_id=993587285 instance=ExtResource("2_o822w")]
 transform = Transform3D(0.44199166, 0, 0, 0, 0.44199166, 0, 0, 0, 0.44199166, -0.35572588, 0.9807225, 0)
 
-[node name="composition12" parent="." unique_id=231727009 instance=ExtResource("3_l271a")]
+[node name="composition12" parent="." unique_id=1537121651 instance=ExtResource("3_l271a")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
-[node name="metarig" parent="composition12" index="0" unique_id=2089761736]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0, 0, 0)
+[node name="metarig" parent="composition12" index="0" unique_id=1094817293]
+transform = Transform3D(0.9979196, -0.06311636, 0.013142032, 0.062198892, 0.996179, 0.06130717, -0.016961303, -0.060362216, 0.99803233, 0.08822644, -0.0117997015, 0.08244532)
+
+[node name="Skeleton3D" parent="composition12/metarig" index="0" unique_id=1577113192]
+bones/1/rotation = Quaternion(-0.035374485, 0.016408687, -0.014214851, 0.99913836)
+bones/2/rotation = Quaternion(-0.065442644, -0.0034630015, -0.0030256922, 0.99784577)
+bones/3/rotation = Quaternion(0.014301908, -0.0057000425, -0.0030677647, 0.9998768)
+bones/4/rotation = Quaternion(0.04991218, 0.030086555, 0.009809843, 0.9982522)
+bones/5/rotation = Quaternion(0.100326784, 0.03160971, 0.0064395396, 0.9944315)
+bones/8/rotation = Quaternion(-0.08075103, 0.82193303, -0.39523843, 0.40210947)
+bones/9/rotation = Quaternion(0.69536346, -0.061314512, 0.029805314, 0.71541727)
+bones/12/rotation = Quaternion(0.16304536, -0.80395585, 0.48958936, 0.29559013)
+bones/13/rotation = Quaternion(0.74736243, 0.054839432, -0.030129958, 0.6614637)
+bones/17/rotation = Quaternion(0.955121, 0.021752851, -0.07497788, 0.28574288)
+bones/18/rotation = Quaternion(0.22517172, -0.0069816797, 0.03508532, 0.97366226)
+bones/19/rotation = Quaternion(-0.5488568, -0.024905391, -0.029312516, 0.8350309)
+bones/22/rotation = Quaternion(0.965523, -0.10783731, 0.15807427, 0.17649111)
+bones/23/rotation = Quaternion(0.25982106, 0.075025216, -0.002028251, 0.96273583)
+bones/24/rotation = Quaternion(-0.623381, 0.0020709354, -0.08710442, 0.77704865)
+bones/25/rotation = Quaternion(0.048427273, 0.9676043, -0.24750924, -0.011657882)
+bones/26/rotation = Quaternion(-0.6499562, 0.71844256, -0.16677266, -0.18325947)
 
 [node name="AnimationTree" type="AnimationTree" parent="composition12" unique_id=305238803]
 tree_root = SubResource("AnimationNodeBlendTree_5efpn")
 anim_player = NodePath("../AnimationPlayer")
-parameters/LocomotionSM/MoveSpace/blend_position = Vector2(0.003755927, 0)
+parameters/LocomotionSM/MoveSpace/blend_position = Vector2(0, -0.0075757504)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1226873085]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0.58954996, 0)

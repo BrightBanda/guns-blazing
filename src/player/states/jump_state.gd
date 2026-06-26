@@ -14,12 +14,15 @@ extends PlayerState
 
 func enter() -> void:
 	player.velocity.y = jump_velocity
+	player.play_anim("jumping_up")
 	
 
 func physics_update(delta: float) -> void:
-	trigger_jump_animation()
 	var gravity = jump_gravity if player.velocity.y > 0.0 else fall_gravity
 	player.velocity.y -= gravity * delta
+	
+	if player.velocity.y < 0:
+		player.play_anim("falling")
 
 	var input_dir := get_movement_input()
 	var direction := (player.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -35,10 +38,8 @@ func physics_update(delta: float) -> void:
 	player.move_and_slide()
 
 	if player.is_on_floor() and player.velocity.y <= 0.0:
+		player.play_anim("landing")
 		if input_dir != Vector2.ZERO:
 			get_parent().transition_to("move") 
 		else:
 			get_parent().transition_to("idle")
-
-func trigger_jump_animation() -> void:
-	player.anim_playback.travel("Jump_full")

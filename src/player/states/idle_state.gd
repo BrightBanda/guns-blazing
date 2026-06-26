@@ -2,6 +2,7 @@ extends PlayerState
 
 @export var friction: float = 25.0
 func enter() -> void:
+	player.anim_playback.travel("MoveSpace")
 	pass
 
 func physics_update(delta: float) -> void:

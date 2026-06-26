@@ -183,3 +183,11 @@ func apply_recoil() -> void:
 
 	base_recoil_offset_x += current_recoil_up * (1.0 - recoil_recovery_ratio)
 	base_recoil_offset_y += random_side * (1.0 - recoil_recovery_ratio)
+
+var current_anim=""
+func play_anim(anim_name:String)-> void:
+	if anim_name == current_anim:
+		return
+	current_anim = anim_name
+	anim_playback.travel(anim_name)
+	
