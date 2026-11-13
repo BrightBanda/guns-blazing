@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://csx33tmd3dxwk"]
+
+[ext_resource type="Script" uid="uid://k3nf6750mpsh" path="res://src/player/hand_ik.gd" id="1_1bg8s"]
+
+[node name="HandIK" type="TwoBoneIK3D" unique_id=1969630205]
+script = ExtResource("1_1bg8s")
+
+[node name="Target_Right" type="Node3D" parent="." unique_id=1626102406]
+
+[node name="Target_Left" type="Node3D" parent="." unique_id=308289608]
+
+[node name="Pole_Right" type="Node3D" parent="." unique_id=1161422141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.245, 1.144, 0.08)
+
+[node name="Pole_Left" type="Node3D" parent="." unique_id=1806068988]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.271, 1.103, 0.041)

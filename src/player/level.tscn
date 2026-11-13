@@ -56,6 +56,26 @@ shadow_enabled = true
 [node name="Player" parent="." unique_id=1381117048 instance=ExtResource("1_rcip6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37884045, 0, -0.6596744)
 
+[node name="metarig" parent="Player/composition12" parent_id_path=PackedInt32Array(1381117048, 1537121651) index="0" unique_id=461884087]
+transform = Transform3D(0.9755378, -0.019328939, -0.21898022, 0.034421284, 0.9972706, 0.06531675, 0.21712008, -0.07125655, 0.97354054, 0.035840154, -0.014501888, 0.08123487)
+
+[node name="Skeleton3D" parent="Player/composition12/metarig" index="0" unique_id=1436359014]
+bones/1/rotation = Quaternion(-0.03409347, -0.014222171, -0.0078879595, 0.99928635)
+bones/2/rotation = Quaternion(-0.065229274, -0.0032447753, -0.003308569, 0.9978596)
+bones/3/rotation = Quaternion(0.01429789, -0.002041775, -0.0023680076, 0.99989295)
+bones/4/rotation = Quaternion(0.04460839, 0.011786177, 0.0042310497, 0.9989261)
+bones/5/rotation = Quaternion(0.09499675, 0.012281234, 0.002788804, 0.9953979)
+bones/8/rotation = Quaternion(-0.04660307, 0.8021114, -0.459289, 0.37881294)
+bones/9/rotation = Quaternion(0.5715855, -0.073934145, 0.028552083, 0.816706)
+bones/12/rotation = Quaternion(0.16590796, -0.802929, 0.49000144, 0.29610524)
+bones/13/rotation = Quaternion(0.7505228, 0.054417588, -0.030144662, 0.65791)
+bones/17/rotation = Quaternion(0.9505807, 0.06061554, -0.105985515, 0.28546298)
+bones/18/rotation = Quaternion(0.24665363, -0.07179112, 0.019264964, 0.96624887)
+bones/19/rotation = Quaternion(-0.5519183, -0.008944856, -0.0024464172, 0.8338467)
+bones/22/rotation = Quaternion(0.96415335, -0.09627252, 0.1356165, 0.20675625)
+bones/23/rotation = Quaternion(0.27818525, 0.07402444, -0.0020746908, 0.9576686)
+bones/24/rotation = Quaternion(-0.6236819, -0.02963222, 0.0018179099, 0.78111434)
+
 [node name="CSGMesh3D" type="CSGMesh3D" parent="." unique_id=1897642818]
 transform = Transform3D(26, 0, 0, 0, 1, 0, 0, 0, 60.585293, 0, -1.346592, 8.773705)
 use_collision = true
@@ -131,3 +151,4 @@ use_collision = true
 size = Vector3(1.1547852, 7.567627, 25.945435)
 
 [editable path="Player"]
+[editable path="Player/composition12"]

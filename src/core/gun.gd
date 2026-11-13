@@ -1,5 +1,7 @@
 extends Node3D
 
+const GRIP_SOCKETS := preload("res://src/core/prefabs/weapon_grips.tscn")
+
 # Changed parameter name to 'current_clip' to accurately reflect the system structure
 signal ammo_changed(current_clip: int, reserve_ammo: int)
 signal reload_started
@@ -7,6 +9,16 @@ signal reload_finished
 
 @export_category("Weapon stats")
 @export var data: WeaponResource
+
+@export_category("Grips")
+## Hand sockets. Assign markers from this weapon's own scene to override.
+@export var right_grip: Marker3D
+@export var left_grip: Marker3D
+## Used when no marker is assigned: where the right hand holds this weapon,
+## expressed in the weapon's local space.
+@export var right_grip_transform := Transform3D.IDENTITY
+@export var left_grip_transform := Transform3D.IDENTITY
+
 var damage: float
 var fire_rate: float
 var fire_range: float
@@ -33,7 +45,53 @@ func _ready() -> void:
 	reserve_ammo = data.max_reserve
 	
 	current_clip = clip_size
+	_ensure_grips()
 	ammo_changed.emit(current_clip, reserve_ammo)
+
+
+## Spawns Grip_Right / Grip_Left from the exported transforms unless the weapon
+## scene already provides markers, so every weapon can be dropped into the mount
+## without extra setup.
+func _ensure_grips() -> void:
+	# A weapon scene can also just name its markers; no export wiring needed.
+	if not is_instance_valid(right_grip):
+		right_grip = _find_own_marker(["RightGripPoint", "Grip_Right"])
+	if not is_instance_valid(left_grip):
+		left_grip = _find_own_marker(["LeftGripPoint", "Grip_Left"])
+	if is_instance_valid(right_grip) and is_instance_valid(left_grip):
+		return
+	var grips := get_node_or_null(^"Grips") as Node3D
+	if grips == null:
+		grips = GRIP_SOCKETS.instantiate() as Node3D
+		grips.name = "Grips"
+		add_child(grips)
+	if not is_instance_valid(right_grip):
+		right_grip = grips.get_node_or_null(^"Grip_Right") as Marker3D
+		if right_grip != null:
+			right_grip.transform = right_grip_transform
+	if not is_instance_valid(left_grip):
+		left_grip = grips.get_node_or_null(^"Grip_Left") as Marker3D
+		if left_grip != null:
+			left_grip.transform = left_grip_transform
+
+
+func _find_own_marker(names: Array) -> Marker3D:
+	for marker_name in names:
+		var found := find_child(marker_name, true, false) as Marker3D
+		if found != null:
+			return found
+	return null
+
+
+## Consumed by HandIK so any weapon scene can describe its own grips.
+func get_grip_sockets() -> Array[Node3D]:
+	return [_resolve_grip(right_grip, "Grip_Right"), _resolve_grip(left_grip, "Grip_Left")]
+
+
+func _resolve_grip(assigned: Marker3D, fallback_name: String) -> Node3D:
+	if is_instance_valid(assigned):
+		return assigned
+	return find_child(fallback_name, true, false) as Node3D
 
 
 func shoot(aim_direction: Vector3) -> bool:

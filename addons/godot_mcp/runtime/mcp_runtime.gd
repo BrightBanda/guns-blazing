@@ -63,6 +63,7 @@ func _process(_delta: float) -> void:
 				"started_at": _started_at_msec,
 			})
 			push_runtime_log("info", "MCPRuntime connected to MCP server.")
+			print("I am connected")
 
 		while _socket.get_available_packet_count() > 0:
 			var raw := _socket.get_packet().get_string_from_utf8()

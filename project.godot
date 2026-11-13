@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 AudioManager="*uid://dmhtw5c50jpoc"
 GameManager="*uid://c6cd20ym1evdh"
-MCPRuntime="*uid://beavy5ka0xm2f"
+MCPRuntime="*res://addons/godot_mcp/runtime/mcp_runtime.gd"
 
 [dotnet]
 

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cv4br6ruked7k"]
+
+[node name="Grips" type="Node3D" unique_id=662364228]
+
+[node name="Grip_Right" type="Marker3D" parent="." unique_id=1191261980]
+
+[node name="Grip_Left" type="Marker3D" parent="." unique_id=2102965740]
+transform = Transform3D(0.9964148, 0.08460274, -2.6558196e-08, 0, 3.1391647e-07, 1, 0.08460274, -0.9964148, 3.12791e-07, 0, 0, 0)
